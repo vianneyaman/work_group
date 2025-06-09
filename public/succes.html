@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Réponse envoyée</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      padding: 50px 20px;
+      background-color: #f0fff4;
+      position: relative;
+      min-height: 80vh;
+    }
+
+    .icon {
+      font-size: 100px;
+      color: #28a745;
+    }
+
+    .message {
+      font-size: 24px;
+      margin: 20px 0;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      text-decoration: none;
+      font-size: 18px;
+      border-radius: 5px;
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    .logout {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 16px;
+      color: #dc3545;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .logout-icon {
+      font-size: 20px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="icon">✅</div>
+  <div class="message">Votre réponse a été enregistrée.<br>Merci pour votre contribution !</div>
+  <a href="form.html" class="btn">Retour au formulaire</a>
+
+  <a href="#" onclick="window.close()" class="logout">
+    <span class="logout-icon">🚪</span> Déconnexion
+  </a>
+</body>
+<!----- bref j'ai faim hein ---->
+
+</html>

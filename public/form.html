@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Formulaire de Satisfaction</title>
+      <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2>Formulaire de Satisfaction</h2>
+  <form id="satisfaction-form">
+    <label>Date et Heure de visite:
+      <input type="datetime-local" name="datetime" required />
+    </label>
+
+    <label>Nom:
+      <input type="text" name="nom" required />
+    </label>
+
+    <label>Email:
+      <input type="email" name="email" />
+    </label>
+<label>Raison de la visite :
+  <select name="raison" required>
+    <option value="Information">Information</option>
+    <option value="Prise de sang">Prise de sang</option>
+    <option value="Résultat de test">Résultat de test</option>
+    <option value="Consultation">Consultation</option>
+    <option value="Vaccination">Vaccination</option>
+    <option value="Suivi de traitement">Suivi de traitement</option>
+    <option value=" Scanner">Scanner</option>
+    <option value="Radio">Radio</option>
+    <option value="Examens médicaux">Examens médicaux</option>
+    <option value="Dépistage">Dépistage</option>
+    <option value="Urgence">Urgence</option>
+    <option value="Bilan de santé">Bilan de santé</option>
+    <option value="Conseils santé">Conseils santé</option>
+    <option value="Autre">Autres</option>
+  </select>
+</label>
+    <label>Niveau de satisfaction :
+  <select name="satisfaction" required>
+    <option value="Très satisfait">Très satisfait</option>
+    <option value="Satisfait">Satisfait</option>
+    <option value="Peu satisfait">Peu satisfait</option>
+    <option value="Pas du tout satisfait">Pas du tout satisfait</option>
+  </select>
+</label><label>Service concerné :
+  <select name="service" required>
+    <option value="Accueil">Accueil</option>
+    <option value="Secrétariat">Secrétariat</option>
+    <option value="Service client">Service client</option>
+    <option value="Laboratoire">Laboratoire</option>
+    <option value="Analyse médicale">Analyse médicale</option>
+    <option value="Service résultats">Service résultats</option>
+    <option value="Radiologie">Radiologie</option>
+    <option value="Echographie">Echographie</option>
+    <option value="Consultation">Consultation</option>
+    <option value="Urgences">Urgences</option>
+  </select>
+</label>
+
+
+    <label>Commentaires:
+      <textarea name="commentaire" rows="4"></textarea>
+    </label>
+
+    <button type="submit">Envoyer</button>
+  </form>
+<script>
+  const form = document.getElementById('satisfaction-form');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    const response = await fetch('http://localhost:3000/api/reponses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      window.location.href = 'succes.html'; 
+    } else {
+      alert("❌ Une erreur s'est produite. Veuillez réessayer.");
+    }
+  });
+</script>
+
+</body>
+<!----- Bon allez vous faire foutre y'a chapgpt dedans l'essentiel est de comprendre .Ma go a fesse!---->
+</html>

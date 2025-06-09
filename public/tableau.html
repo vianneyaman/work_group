@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Tableau de bord - Enquête</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    .download-btn {
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    .chart-container {
+  width: 250px;
+  height: 250px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+  </style>
+</head>
+<body>
+
+  <h1>Tableau de Bord - Résultats de l'Enquête</h1>
+
+  <div class="section">
+    <h2>Téléchargement des données</h2>
+    <button class="download-btn" onclick="downloadCSV()">📥 Télécharger les réponses</button>
+  </div>
+
+  <div class="section">
+    <h2>Liste des réponses</h2>
+    <table id="responsesTable">
+      <thead>
+        <tr>
+          <th>Date et Heure de viste</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Raison de visite</th>
+          <th>Niveau de satisfaction</th>
+          <th>Service concerné</th>
+          <th>Commentaires</th>
+        </tr>
+      </thead>
+      <tbody id="responsesBody">
+
+    </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="chart-container">
+      <canvas id="satisfactionChart"></canvas>
+          <h5>Statistiques de satisfaction</h5> <br>
+
+    </div>
+    <br><br>
+  </div>
+
+  <script>fetch('http://localhost:3000/api/reponses') 
+  .then(res => res.json())
+  .then(responses => {
+    const tbody = document.getElementById("responsesBody");
+    let satisfaits = 0;
+
+    responses.forEach(r => {
+      const row = `<tr>
+        <td>${new Date(r.date_visite).toLocaleString()}</td>
+        <td>${r.nom}</td>
+        <td>${r.email}</td>
+        <td>${r.raison}</td>
+        <td>${r.satisfaction}</td>
+        <td>${r.service}</td>
+        <td>${r.commentaire}</td>
+      </tr>`;
+      tbody.innerHTML += row;
+
+      if (r.niveau_satisfaction >= 4) satisfaits++;
+    });
+
+    const satisfactionLevels = {
+  "Très satisfait": 0,
+  "Satisfait": 0,
+  "Peu satisfait": 0,
+  "Pas du tout satisfait": 0
+};
+
+responses.forEach(r => {
+  if (satisfactionLevels.hasOwnProperty(r.satisfaction)) {
+    satisfactionLevels[r.satisfaction]++;
+  }
+});
+
+const ctx = document.getElementById("satisfactionChart").getContext("2d");
+new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+    labels: Object.keys(satisfactionLevels),
+    datasets: [{
+      data: Object.values(satisfactionLevels),
+      backgroundColor: ["#28a745", "#17a2b8", "#ffc107", "#dc3545"]
+    }]
+  },
+  options: {
+    plugins: {
+      legend: {
+        position: 'top'
+      }
+    }
+  }
+});
+
+
+    window.downloadCSV = () => {
+      let csv = "Nom,Service,Satisfaction,Commentaire,Date\n";
+      responses.forEach(r => {
+        csv += `${r.nom},${r.service_concerne},${r.niveau_satisfaction},${r.commentaires},${new Date(r.date_visite).toLocaleString()}\n`;
+      });
+
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "reponses_enquete.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+  })
+  .catch(error => {
+    console.error("Erreur lors de la récupération des données :", error);
+  });
+
+</script>
+
+<!----- Cendrillon veut se rallier lol elle sait graiiiiii heinnn mdr---->
+
+</body>
+</html>
