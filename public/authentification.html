@@ -4,78 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Connexion Admin</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f3f4f6;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="authentification.css">
 
-    .login-container {
-      background-color: white;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-      height: auto;
-    }
-
-    h2 {
-      margin-bottom: 30px;
-      color: #333;
-    }
-
-    input[type="text"],
-    input[type="password"] {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #0d8d29;
-      color: white;
-      border: none;
-      font-size: 18px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #0e79d1;
-    }
-
-    .error {
-      color: red;
-      margin-top: 10px;
-      display: none;
-    }
-  </style>
 </head>
 <body>
-  <div class="login-container">
-    <h2>Connexion </h2>
-    <form id="loginForm">
-      <input type="text" id="username" placeholder="Nom d'utilisateur" required />
-      <input type="password" id="password" placeholder="Mot de passe" required />
-      <button type="submit">Se connecter</button>
-      <p class="error" id="errorMsg">Nom d'utilisateur ou mot de passe incorrect</p>
-    </form>
+  <div class="container">
+    <div class="form">
+      <h2>Connexion Admin</h2>
+      <form id="loginForm">
+        <div class="inputbox">
+          <input type="text" id="username" placeholder="Nom d'utilisateur" required />
+        </div>
+        <div class="inputbox">
+          <input type="password" id="password" placeholder="Mot de passe" required />
+        </div>
+        <div class="inputbox">
+          <input type="submit" value="Connexion" class="submit" />
+        </div>
+        <p class="error" id="errorMsg">Nom d'utilisateur ou mot de passe incorrect</p>
+      </form>
+      <div class="footer">© 2025 - Accès réservé</div>
+    </div>
   </div>
 
   <script>
-
     const form = document.getElementById('loginForm');
     const errorMsg = document.getElementById('errorMsg');
 
@@ -85,23 +38,15 @@
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
 
-      // Ici c'est ce que l'admin va devoir entrer pour accéder à son dashboard
       const ADMIN_USERNAME = "admin";
       const ADMIN_PASSWORD = "1234";
 
       if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-        window.location.href = "tableau.html"; 
+        window.location.href = "tableau.html";
       } else {
         errorMsg.style.display = "block";
-
-
-    }
-
-    }
-);
-
+      }
+    });
   </script>
-  <!----- Bon allez vous faire foutre y'a chapgpt dedans l'essentiel est de comprendre .Ma go a fesse!---->
-
 </body>
-</html>     
+</html>

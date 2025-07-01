@@ -4,33 +4,102 @@
   <meta charset="UTF-8">
   <title>Tableau de bord - Enquête</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
     }
 
-    h1 {
-      text-align: center;
-      color: #007bff;
+    body {
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(rgba(36, 35, 42, 0.9), rgba(36, 35, 42, 0.9)),
+                  url('https://images.unsplash.com/photo-1588776814546-ec0f2dfd1e7d?auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+      color: #f4f4f4;
+      animation: fadeInBody 1s ease-in-out;
+    }
+
+    @keyframes fadeInBody {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      animation: slideIn 1s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(-50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    header h1 {
+      color: #03fe78;
+      text-shadow: 1px 1px 3px #000;
+    }
+
+    .logout-btn {
+      background: #d803fe;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .logout-btn:hover {
+      background: #c91515;
+      color: #0a080a;
     }
 
     .section {
       margin-bottom: 40px;
+      background: rgba(28, 28, 28, 0.95);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      animation: fadeInSection 1s ease-in-out;
+    }
+
+    @keyframes fadeInSection {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h2 {
+      color: #28a745;
+      margin-bottom: 15px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-    }
-
-    table, th, td {
-      border: 1px solid #ccc;
+      margin-top: 10px;
     }
 
     th, td {
+      border: 1px solid #444;
       padding: 10px;
       text-align: center;
+    }
+
+    th {
+      background: #1c1c1c;
+      color: #03fe78;
+    }
+
+    tr:hover {
+      background-color: rgba(255,255,255,0.05);
+      transition: 0.3s ease;
     }
 
     .download-btn {
@@ -40,28 +109,38 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      margin-bottom: 20px;
+      margin-top: 10px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .download-btn:hover {
+      background: #218838;
     }
 
     .chart-container {
-  width: 250px;
-  height: 250px;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+    }
 
   </style>
 </head>
 <body>
 
-  <h1>Tableau de Bord - Résultats de l'Enquête</h1>
+  <!-- Titre + bouton de déconnexion -->
+  <header>
+    <h1>👨‍⚕️ Tableau de Bord - Résultats de l'Enquête</h1>
+    <button class="logout-btn" onclick="window.location.href='Home.html'">Se déconnecter</button>
+  </header>
 
+  <!-- Section téléchargement -->
   <div class="section">
     <h2>Téléchargement des données</h2>
-    <button class="download-btn" onclick="downloadCSV()">📥 Télécharger les réponses</button>
+    <button class="download-btn" onclick="downloadCSV()">📅 Télécharger les réponses</button>
   </div>
 
+  <!-- Section liste des réponses -->
   <div class="section">
     <h2>Liste des réponses</h2>
     <table id="responsesTable">
@@ -77,96 +156,120 @@
         </tr>
       </thead>
       <tbody id="responsesBody">
-
-    </tbody>
+        <!-- Remplissage dynamique en JS -->
+      </tbody>
     </table>
   </div>
 
+  <!-- Section graphique -->
   <div class="section">
+    <h2>Statistiques de satisfaction</h2>
     <div class="chart-container">
       <canvas id="satisfactionChart"></canvas>
-          <h5>Statistiques de satisfaction</h5> <br>
-
     </div>
-    <br><br>
   </div>
 
-  <script>fetch('http://localhost:3000/api/reponses') 
-  .then(res => res.json())
-  .then(responses => {
-    const tbody = document.getElementById("responsesBody");
-    let satisfaits = 0;
+  <script>
+    // Appel API pour récupérer les réponses
+    fetch('http://localhost:3000/api/reponses') 
+    .then(res => res.json())
+    .then(responses => {
+      const tbody = document.getElementById("responsesBody");
 
-    responses.forEach(r => {
-      const row = `<tr>
-        <td>${new Date(r.date_visite).toLocaleString()}</td>
-        <td>${r.nom}</td>
-        <td>${r.email}</td>
-        <td>${r.raison}</td>
-        <td>${r.satisfaction}</td>
-        <td>${r.service}</td>
-        <td>${r.commentaire}</td>
-      </tr>`;
-      tbody.innerHTML += row;
+      // Initialisation des statistiques
+      const satisfactionLevels = {
+        "Très satisfait": 0,
+        "Satisfait": 0,
+        "Peu satisfait": 0,
+        "Pas du tout satisfait": 0
+      };
 
-      if (r.niveau_satisfaction >= 4) satisfaits++;
-    });
+      // Boucle de remplissage
+      responses.forEach(r => {
+        const row = `<tr>
+          <td>${new Date(r.datetime).toLocaleString()}</td>
+          <td>${r.nom}</td>
+          <td>${r.email}</td>
+          <td>${r.raison}</td>
+          <td>${r.satisfaction}</td>
+          <td>${r.service}</td>
+          <td>${r.commentaire}</td>
+        </tr>`;
+        tbody.innerHTML += row;
 
-    const satisfactionLevels = {
-  "Très satisfait": 0,
-  "Satisfait": 0,
-  "Peu satisfait": 0,
-  "Pas du tout satisfait": 0
-};
-
-responses.forEach(r => {
-  if (satisfactionLevels.hasOwnProperty(r.satisfaction)) {
-    satisfactionLevels[r.satisfaction]++;
-  }
-});
-
+        if (satisfactionLevels.hasOwnProperty(r.satisfaction)) {
+          satisfactionLevels[r.satisfaction]++;
+        }
+      });// Création du graphique dynamique
 const ctx = document.getElementById("satisfactionChart").getContext("2d");
+const total = Object.values(satisfactionLevels).reduce((a, b) => a + b, 0);
+
 new Chart(ctx, {
   type: 'doughnut',
   data: {
     labels: Object.keys(satisfactionLevels),
     datasets: [{
       data: Object.values(satisfactionLevels),
-      backgroundColor: ["#28a745", "#17a2b8", "#ffc107", "#dc3545"]
+      backgroundColor: ["#28a745", "#17a2b8", "#ffc107", "#dc3545"],
+      borderColor: "#ffffff",
+      borderWidth: 2,
+      hoverOffset: 20, // Effet explosion
     }]
   },
   options: {
+    responsive: true,
+    cutout: '60%',
+    animation: {
+      animateRotate: true,
+      animateScale: true,
+      duration: 2000
+    },
     plugins: {
       legend: {
-        position: 'top'
+        position: 'bottom',
+        labels: {
+          color: '#ffffff',
+          padding: 20,
+          font: {
+            size: 14
+          }
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const label = context.label || '';
+            const value = context.parsed || 0;
+            const percentage = ((value / total) * 100).toFixed(1);
+            return `${label}: ${value} `;
+          }
+        }
       }
     }
   }
 });
 
+      // Téléchargement CSV
+      window.downloadCSV = () => {
+        let csv = "Nom,Service,Satisfaction,Commentaire,Date\n";
+        responses.forEach(r => {
+          csv += `${r.nom},${r.service},${r.satisfaction},${r.commentaire},${new Date(r.datetime).toLocaleString()}\n`;
+        });
 
-    window.downloadCSV = () => {
-      let csv = "Nom,Service,Satisfaction,Commentaire,Date\n";
-      responses.forEach(r => {
-        csv += `${r.nom},${r.service_concerne},${r.niveau_satisfaction},${r.commentaires},${new Date(r.date_visite).toLocaleString()}\n`;
-      });
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "reponses_enquete.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+      };
+    })
+    .catch(error => {
+      console.error("Erreur lors de la récupération des données :", error);
+    });
+  </script>
 
-      const blob = new Blob([csv], { type: "text/csv" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "reponses_enquete.csv";
-      a.click();
-      URL.revokeObjectURL(url);
-    };
-  })
-  .catch(error => {
-    console.error("Erreur lors de la récupération des données :", error);
-  });
-
-</script>
-
-<!----- Cendrillon veut se rallier lol elle sait graiiiiii heinnn mdr---->
-
+  <!-- Cendrillon veut se rallier lol elle sait graiiiiii heinnn mdr -->
 </body>
 </html>

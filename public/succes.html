@@ -1,74 +1,211 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" >
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Réponse envoyée</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet" />
   <style>
-    body {
+    /* Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body, html {
+      height: 100%;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 40px 60px;
+      border-radius: 25px;
+      box-shadow: 0 0 40px rgba(255,255,255,0.2);
       text-align: center;
-      font-family: Arial, sans-serif;
-      padding: 50px 20px;
-      background-color: #f0fff4;
+      max-width: 450px;
       position: relative;
-      min-height: 80vh;
+      overflow: visible;
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      } to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .icon {
-      font-size: 100px;
-      color: #28a745;
+      font-size: 90px;
+      background: radial-gradient(circle, #08e98f 40%, #00cc66 60%);
+      width: 120px;
+      height: 120px;
+      line-height: 120px;
+      margin: 0 auto 20px auto;
+      border-radius: 50%;
+      box-shadow:
+        0 0 15px #00ff99,
+        0 0 30px #00ff99,
+        0 0 40px #00cc66,
+        0 0 70px #00cc66;
+      animation: pulse 2s infinite ease-in-out;
+      user-select: none;
+    }
+
+    @keyframes pulse {
+      0%, 90% {
+        box-shadow:
+          0 0 15px #00ff99,
+          0 0 30px #00ff99,
+          0 0 40px #00cc66,
+          0 0 70px #00cc66;
+        transform: scale(1);
+      }
+      50% {
+        box-shadow:
+          0 0 25px #00ff99,
+          0 0 45px #00ff99,
+          0 0 60px #00cc66,
+          0 0 100px #00cc66;
+        transform: scale(1.1);
+      }
     }
 
     .message {
-      font-size: 24px;
-      margin: 20px 0;
+      font-size: 22px;
+      margin-bottom: 30px;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(0,0,0,0.2);
+      user-select: none;
     }
 
     .btn {
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: white;
+      background: #00ff99;
+      color: #004d24;
       border: none;
-      text-decoration: none;
+      font-weight: 700;
       font-size: 18px;
-      border-radius: 5px;
-      display: inline-block;
-      margin-top: 20px;
+      padding: 14px 50px;
+      border-radius: 40px;
+      cursor: pointer;
+      box-shadow:
+        0 5px 15px rgba(0,255,153,0.6);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      user-select: none;
     }
 
     .btn:hover {
-      background-color: #0056b3;
+      background: #00cc66;
+      box-shadow:
+        0 8px 25px rgba(0,204,102,0.9);
+      transform: translateY(-4px);
     }
 
     .logout {
       position: absolute;
-      bottom: 20px;
+      bottom: -50px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 16px;
-      color: #dc3545;
-      text-decoration: none;
+      color: #ff4d4d;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
       display: flex;
       align-items: center;
       gap: 8px;
-      cursor: pointer;
+      font-size: 16px;
+      transition: color 0.25s ease;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      text-decoration: none;
+    }
+
+    .logout:hover {
+      color: #cc0000;
     }
 
     .logout-icon {
-      font-size: 20px;
+      font-size: 22px;
     }
 
+    /* Confetti animation */
+    .confetti {
+      pointer-events: none;
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background-color: #37926e;
+      opacity: 0.9;
+      border-radius: 3px;
+      animation-name: confettiFall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      z-index: 1000;
+      filter: drop-shadow(0 0 3px #00ff99);
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="icon">✅</div>
-  <div class="message">Votre réponse a été enregistrée.<br>Merci pour votre contribution !</div>
-  <a href="form.html" class="btn">Retour au formulaire</a>
+  <div class="container" role="alert" aria-live="polite">
+    <div class="icon">✅</div>
+    <div class="message">
+      Votre réponse a été enregistrée.<br />
+      Merci pour votre contribution !
+    </div>
+    <button class="btn" onclick="window.location.href='form.html'">Retour au formulaire</button>
+    <a href="Home.html" class="logout">
+      <span class="logout-icon">🚪</span> Déconnexion
+    </a>
+  </div>
 
-  <a href="#" onclick="window.close()" class="logout">
-    <span class="logout-icon">🚪</span> Déconnexion
-  </a>
+  <script>
+    // Confetti effect generation
+    function createConfettiPiece() {
+      const confetti = document.createElement('div');
+      confetti.classList.add('confetti');
+      confetti.style.left = Math.random() * window.innerWidth + 'px';
+      confetti.style.animationDuration = (3 + Math.random() * 3) + 's';
+      confetti.style.animationDelay = (Math.random() * 3) + 's';
+      confetti.style.backgroundColor = `hsl(${Math.random()*360}, 70%, 60%)`;
+      confetti.style.width = confetti.style.height = (6 + Math.random() * 6) + 'px';
+      document.body.appendChild(confetti);
+
+      setTimeout(() => {
+        confetti.remove();
+      }, 6000);
+    }
+
+    // Launch confetti continuously for 5 seconds
+    let confettiInterval = setInterval(() => {
+      createConfettiPiece();
+    }, 200);
+
+    setTimeout(() => {
+      clearInterval(confettiInterval);
+    }, 5000);
+  </script>
 </body>
-<!----- bref j'ai faim hein ---->
-
 </html>

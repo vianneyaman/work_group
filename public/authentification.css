@@ -1,0 +1,127 @@
+* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(rgba(36, 35, 42, 0.9), rgba(36, 35, 42, 0.9)),
+                  url('https://images.unsplash.com/photo-1588776814546-ec0f2dfd1e7d?auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      backdrop-filter: blur(3px);
+    }
+
+    .container {
+      position: relative;
+      width: 450px;
+      height: 470px;
+      background: #1c1c1c;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .container::before,
+    .container::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 300px;
+      height: 420px;
+      background: linear-gradient(0deg, transparent, #03fe78);
+      transform-origin: bottom right;
+      animation: animate 10s linear infinite;
+      z-index: 1;
+    }
+
+    .container::after {
+      background: linear-gradient(0deg, transparent, #d803fe);
+      animation-delay: 5s;
+    }
+
+    @keyframes animate {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .form {
+      position: absolute;
+      inset: 3px;
+      border-radius: 8px;
+      background: #24232a;
+      z-index: 2;
+      padding: 50px 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form h2 {
+      text-align: center;
+      letter-spacing: 0.3em;
+      color: #03fe78;
+      margin-bottom: 30px;
+    }
+
+    .inputbox {
+      position: relative;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .inputbox input {
+      width: 100%;
+      padding: 12px 10px;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #03fe78;
+      font-size: 1em;
+      outline: none;
+      transition: 0.5s;
+      color: #ffffff;
+    }
+
+    .inputbox input:focus {
+      border-color: #d803fe;
+    }
+
+    input[type="submit"].submit {
+      padding: 12px;
+      background: #03fe78;
+      color: #1c1c1c;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      font-weight: bold;
+      margin-top: 30px;
+      cursor: pointer;
+      transition: 0.5s ease;
+    }
+
+    input[type="submit"].submit:hover {
+      background-color: #d803fe;
+      color: #ffffff;
+    }
+
+    .error {
+      color: #d63031;
+      margin-top: 10px;
+      text-align: center;
+      font-size: 14px;
+      display: none;
+    }
+
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+    }
